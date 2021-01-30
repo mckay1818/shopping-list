@@ -1,6 +1,7 @@
 var button = document.getElementById("enter");
 var input = document.getElementById("userinput");
 var ul = document.querySelector("ul");
+var listItemDivs = document.getElementsByClassName("list-item");
 var listItems = document.getElementsByTagName("li");
 var deleteBtns = document.getElementsByClassName("delete");
 
@@ -9,15 +10,18 @@ function inputLength() {
 }
 
 function createListElement() {
+	var div = document.createElement("div");
+	div.classList.add("list-item");
 	var li = document.createElement("li");
 	li.appendChild(document.createTextNode(input.value));
-	ul.appendChild(li);
+	ul.appendChild(div).appendChild(li);
 	addLiEvent();
 	// addBtnEvent();
 	var deleteBtn = document.createElement("button");
 	deleteBtn.classList.add("delete");
 	deleteBtn.innerHTML = "Delete";
-	li.insertAdjacentElement("afterend", deleteBtn);
+	div.appendChild(deleteBtn);
+	addBtnEvent();
 	input.value = "";
 }
 
@@ -32,10 +36,9 @@ function addListAfterKeypress(event) {
 		createListElement();
 	}
 }
-	
 
-function removeParent() {
-	this.parentNode.remove();
+function removeDiv(event) {
+	event.currentTarget.parentNode.remove();
 }
 
 function toggleDone(event) {
@@ -45,7 +48,7 @@ function toggleDone(event) {
 function addBtnEvent() {
 	//can't do forEach bc HTMLCollection is NOT an array
 	for (let i = 0; i < deleteBtns.length; i++) {
-		deleteBtns[i].addEventListener("click", removeParent);
+		deleteBtns[i].addEventListener("click", removeDiv);
 	}
 }
 
@@ -56,7 +59,8 @@ function addLiEvent() {
 	}
 }
 
-addLiEvent();
-addBtnEvent();
 button.addEventListener("click", addListAfterClick);
 input.addEventListener("keypress", addListAfterKeypress);
+
+addLiEvent();
+addBtnEvent();
